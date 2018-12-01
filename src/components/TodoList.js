@@ -1,41 +1,40 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-class TodoList extends Component {
-	state = {
-		count: 0,
-		items: []
-	}
+function TodoList() {
+	const [count, setCount] = useState(0);
+	const [items, setItems] = useState([]);
+	const [field, setField] = useState();
 
-	updateTodo(f) {
+	const updateTodo = (f) => {
 		if (!f.value) {
 			return;
 		}
 
-		const count = this.state.count + 1;
-		const items = [...this.state.items];
-		items.push(f.value)
-		const field = f
-		field.value = ''
+		const newItems = [...items];
+		newItems.push(f.value);
 
-		this.setState({ field, count, items });
+		const clearedField = f;
+		clearedField.value = '';
+
+		setCount(count + 1);
+		setField(clearedField);
+		setItems(newItems);
 	}
 
-	render() {
-		return (
+	return (
+		<div>
+			<ol>
+				{ items.map((item) => <li>{item}</li>) }
+			</ol>
+			<h3>
+				Add Todo:
+			</h3>
 			<div>
-				<ol>
-					{ this.state.items.map((item) => <li>{item}</li>) }
-				</ol>
-				<h3>
-					Add Todo:
-				</h3>
-				<div>
-					<input onBlur={(e) => { this.setState({ field: e.target }) }} />
-					<button onClick={() => { this.updateTodo(this.state.field) }} >Add</button>
-				</div>
+				<input onBlur={(e) => { setField(e.target) }} />
+				<button onClick={() => { updateTodo(field) }} >Add</button>
 			</div>
-		)
-	}
+		</div>
+	);
 }
 
 export default TodoList;
